@@ -1,0 +1,5 @@
+if(EXISTS "/home/gaeqs/CLionProjects/HeyListen/cmake-build-debug/tests/hey_listen_tests-b12d07c_tests.cmake")
+  include("/home/gaeqs/CLionProjects/HeyListen/cmake-build-debug/tests/hey_listen_tests-b12d07c_tests.cmake")
+else()
+  add_test(hey_listen_tests_NOT_BUILT-b12d07c hey_listen_tests_NOT_BUILT-b12d07c)
+endif()
