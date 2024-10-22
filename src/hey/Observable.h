@@ -10,7 +10,7 @@
 namespace hey {
     template<typename Event>
     class Observable {
-        std::vector<ListenCounter<Event>*> _counters;
+        mutable std::vector<ListenCounter<Event>*> _counters;
 
     public:
         Observable(const Observable& other) = delete;
@@ -27,7 +27,7 @@ namespace hey {
             }
         }
 
-        void addListener(const Listener<Event>& listener) {
+        void addListener(const Listener<Event>&  listener) const {
             auto* counter = listener.getCounter();
             _counters.push_back(counter);
             ++counter->registered;
@@ -43,13 +43,13 @@ namespace hey {
         }
 
         template<class Fun>
-        Listener<Event> createListener(Fun fun) {
+        Listener<Event> createListener(Fun fun) const {
             Listener<Event> listener(std::move(fun));
             addListener(listener);
             return listener;
         }
 
-        Observable& operator+=(const Listener<Event>& listener) {
+        const Observable& operator+=(const Listener<Event>& listener) const {
             addListener(listener);
             return *this;
         }

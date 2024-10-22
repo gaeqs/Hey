@@ -10,24 +10,24 @@
 
 namespace hey {
     template<typename T>
-    class ObservableValue : public Observable<T&>, public Value<T&> {
+    class ObservableValue : public Observable<T>, public Value<T> {
         T _value;
 
     public:
         ObservableValue() = default;
 
-        explicit ObservableValue(const T value) : _value(value) {}
+        ObservableValue(const T& value) : _value(value) {}
 
-        explicit ObservableValue(T&& value) : _value(std::move(value)) {}
+        ObservableValue(T&& value) : _value(std::move(value)) {}
 
         ~ObservableValue() override = default;
 
-        T& getValue() override {
+        T getValue() override {
             return _value;
         }
 
-        const T& getValue() const override {
-            exit(0);
+        T getValue() const override {
+            return _value;
         }
 
         void setValue(const T& value) {

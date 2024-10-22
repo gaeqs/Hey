@@ -29,6 +29,7 @@ namespace hey {
         Listener() : _counter(new ListenCounter<Event>(0, nullptr, true)) {};
 
         template<class Fun>
+        requires std::is_invocable_v<Fun, Event>
         Listener(Fun callee): _counter(new ListenCounter<Event>(0, callee, true)) {}
 
         ~Listener() {
