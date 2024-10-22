@@ -76,6 +76,6 @@ TEST_CASE("Derived values", "[example]") {
     std::cout << "C = " << c.getValue() << "." << std::endl;
     std::cout << "----------------------" << std::endl;
 
-    a = 10;
-    b = 40;
+    a = 10; // Calls aListener and cListener.
+    b = 40; // Calls bListener and cListener.
 }
