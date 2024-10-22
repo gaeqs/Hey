@@ -11,8 +11,6 @@ target_include_directories(hey INTERFACE
         $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/src>
         $<INSTALL_INTERFACE:src>)
 
-message("OWO ${PROJECT_SOURCE_DIR}/hey")
-
 install(TARGETS hey
         EXPORT hey_targets
         LIBRARY DESTINATION lib

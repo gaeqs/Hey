@@ -18,6 +18,12 @@ TEST_CASE("Basics") {
     observable.invoke(42);
 
     REQUIRE(called);
+
+    called = false;
+    observable -= listener;
+
+    observable.invoke(42);
+    REQUIRE(!called);
 }
 
 TEST_CASE("Value") {
@@ -58,5 +64,41 @@ TEST_CASE("Derived Value") {
     a = 10;
 
     REQUIRE(c.getValue() == 13);
+    REQUIRE(called);
+}
+
+TEST_CASE("Move observable") {
+    bool called = false;
+    hey::Observable<int> observable;
+
+    hey::Listener<int> listener = [&called](int i) {
+        REQUIRE(i == 42);
+        called = true;
+    };
+    observable += listener;
+
+    hey::Observable<int> moved = std::move(observable);
+
+    observable.invoke(42);
+
+    REQUIRE(!called);
+
+    moved.invoke(42);
+    REQUIRE(called);
+}
+
+TEST_CASE("Move listener") {
+    bool called = false;
+    hey::Observable<int> observable;
+
+    hey::Listener<int> listener = [&called](int i) {
+        REQUIRE(i == 42);
+        called = true;
+    };
+    observable += listener;
+
+    hey::Listener<int> moved = std::move(listener);
+
+    observable.invoke(42);
     REQUIRE(called);
 }

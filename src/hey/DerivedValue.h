@@ -6,6 +6,12 @@
 #define DERIVEDVALUE_H
 
 namespace hey {
+    /**
+    * Represents a value that is derived from other values.
+    *
+    * The value of this object will change when any of its
+    * observable values changes.
+    */
     template<typename T, typename... D>
     class DerivedValue : public Value<T>, public Observable<T> {
         std::tuple<Listener<D>...> _listeners;
@@ -32,20 +38,36 @@ namespace hey {
         }
 
     public:
+        /**
+        * Creates a new derived value using the given sources and
+        * the given map function.
+        *
+        * Every time any of the given sources changes, the map function
+        * will be invoked using the data inside all sources.
+        *
+        * @param fun the map function.
+        * @param sources the sources.
+        */
         template<typename Fun>
-        explicit DerivedValue(Fun fun, const Value<D>&... obs)
-            : _listeners(std::make_tuple(createListener<D>(obs)...)),
-              _values(&obs...),
+        explicit DerivedValue(Fun fun, const Value<D>&... sources)
+            : _listeners(std::make_tuple(createListener<D>(sources)...)),
+              _values(&sources...),
               _mapper(fun) {
             refreshValue();
         }
 
         ~DerivedValue() override = default;
 
+        /**
+        * @returns the hold value.
+        */
         T getValue() const override {
             return _result;
         }
 
+        /**
+        * @returns the hold value.
+        */
         T getValue() override {
             return _result;
         }
