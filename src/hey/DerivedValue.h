@@ -27,7 +27,7 @@ namespace hey {
         }
 
         template<typename V>
-        Listener<V> createListener(const Value<V>& value) {
+        Listener<V> asListener(const Value<V>& value) {
             auto* obs = dynamic_cast<const Observable<V>*>(&value);
             if (obs != nullptr) {
                 return obs->createListener([this](const auto&) {
@@ -50,7 +50,7 @@ namespace hey {
         */
         template<typename Fun>
         explicit DerivedValue(Fun fun, const Value<D>&... sources)
-            : _listeners(std::make_tuple(createListener<D>(sources)...)),
+            : _listeners(std::make_tuple(asListener<D>(sources)...)),
               _values(&sources...),
               _mapper(fun) {
             refreshValue();

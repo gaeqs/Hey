@@ -21,7 +21,7 @@ void operator delete(void* p) {
 }
 
 
-TEST_CASE("Counter") {
+TEST_CASE("Counter", "[pointer]") {
     auto observable = new hey::Observable<int>;
     auto listener = new hey::Listener<int>{[](int i) {}};
     hey::ListenCounter<int>* counter = listener->getCounter();

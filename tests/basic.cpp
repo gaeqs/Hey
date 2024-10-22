@@ -5,7 +5,7 @@
 #include <catch2/catch_all.hpp>
 #include <hey/Hey.h>
 
-TEST_CASE("Basics") {
+TEST_CASE("Basics", "[basic]") {
     bool called = false;
     hey::Observable<int> observable;
     hey::Listener<int> listener = [&called](int i) {
@@ -26,7 +26,7 @@ TEST_CASE("Basics") {
     REQUIRE(!called);
 }
 
-TEST_CASE("Value") {
+TEST_CASE("Value", "[basic]") {
     bool called = false;
     hey::ObservableValue<std::string> observable;
     hey::Listener<std::string> listener = [&called](const std::string& i) {
@@ -43,7 +43,7 @@ TEST_CASE("Value") {
 }
 
 
-TEST_CASE("Derived Value") {
+TEST_CASE("Derived Value", "[basic]") {
     bool called = false;
     hey::ObservableValue a = 2;
     hey::ObservableValue b = 3;
@@ -67,7 +67,7 @@ TEST_CASE("Derived Value") {
     REQUIRE(called);
 }
 
-TEST_CASE("Move observable") {
+TEST_CASE("Move observable", "[basic]") {
     bool called = false;
     hey::Observable<int> observable;
 
@@ -87,7 +87,7 @@ TEST_CASE("Move observable") {
     REQUIRE(called);
 }
 
-TEST_CASE("Move listener") {
+TEST_CASE("Move listener", "[basic]") {
     bool called = false;
     hey::Observable<int> observable;
 

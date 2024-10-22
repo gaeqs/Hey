@@ -76,6 +76,8 @@ namespace hey {
         /**
         * Calls all listeners registered on this observable object.
         *
+        * The invocation orders will follow the registration order.
+        *
         * @param event the data passed to the listeners.
         */
         void invoke(Event event) const {
