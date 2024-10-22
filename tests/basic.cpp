@@ -3,22 +3,35 @@
 //
 
 #include <catch2/catch_all.hpp>
-
-#include <hey_listen/HeyListen.h>
+#include <hey/Hey.h>
 
 TEST_CASE("Basics") {
     bool called = false;
-    hey_listen::Observable<int> observable;
-    hey_listen::Listener<int> listener{
-        [&called](int i) {
-            REQUIRE(i == 42);
-            called = true;
-        }
+    hey::Observable<int> observable;
+    hey::Listener<int> listener = [&called](int i) {
+        REQUIRE(i == 42);
+        called = true;
+    };
+
+    observable += listener;
+
+    observable.invoke(42);
+
+    REQUIRE(called);
+}
+
+TEST_CASE("Value") {
+    bool called = false;
+    hey::ObservableValue<std::string> observable;
+    hey::Listener<std::string> listener = [&called](const std::string& i) {
+        REQUIRE(i == "patata");
+        called = true;
     };
 
     observable.addListener(listener);
 
-    observable.invoke(42);
+    observable = "patata";
 
+    REQUIRE(observable.getValue() == "patata");
     REQUIRE(called);
 }

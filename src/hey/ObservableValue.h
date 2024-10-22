@@ -5,10 +5,52 @@
 #ifndef OBSERVABLEVALUE_H
 #define OBSERVABLEVALUE_H
 
+#include <hey/Observable.h>
+#include <hey/Value.h>
+
 namespace hey {
-    template<typename Value>
-    class ObservableValue : public Observable<Value> {
-        Value _value;
+    template<typename T>
+    class ObservableValue : public Observable<T&>, public Value<T&> {
+        T _value;
+
+    public:
+        ObservableValue() = default;
+
+        explicit ObservableValue(const T value) : _value(value) {}
+
+        explicit ObservableValue(T&& value) : _value(std::move(value)) {}
+
+        ~ObservableValue() override = default;
+
+        T& getValue() override {
+            return _value;
+        }
+
+        const T& getValue() const override {
+            exit(0);
+        }
+
+        void setValue(const T& value) {
+            _value = value;
+            this->invoke(_value);
+        }
+
+        void setValue(T&& value) {
+            _value = std::move(value);
+            this->invoke(_value);
+        }
+
+        ObservableValue& operator=(const T& other) {
+            _value = std::move(other);
+            this->invoke(_value);
+            return *this;
+        }
+
+        ObservableValue& operator=(T&& other) {
+            _value = std::move(other);
+            this->invoke(_value);
+            return *this;
+        }
     };
 }
 #endif //OBSERVABLEVALUE_H

@@ -1,5 +1,0 @@
-# ninja log v6
-3	2084	1729517506160131162	tests/CMakeFiles/hey_listen_tests.dir/basic.cpp.o	45331cca0426441f
-2084	2298	1729517508454130207	tests/hey_listen_tests-b12d07c_tests.cmake	1039312044c3b133
-2084	2298	1729517508454130207	tests/hey_listen_tests	1039312044c3b133
-2084	2298	1729517508454130207	/home/gaeqs/CLionProjects/HeyListen/cmake-build-debug/tests/hey_listen_tests-b12d07c_tests.cmake	1039312044c3b133

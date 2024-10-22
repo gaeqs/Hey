@@ -11,7 +11,8 @@ namespace hey {
     template<typename Event>
     struct ListenCounter {
         size_t registered;
-        std::function<void(Event)> _callee;
+        std::function<void(Event)> callee;
+        bool active;
     };
 
     template<typename Event>
@@ -19,11 +20,20 @@ namespace hey {
         ListenCounter<Event>* _counter;
 
     public:
-        Listener(std::function<void(Event)> callee)
-            : _counter(new ListenCounter<Event>(0, callee)) {}
+        Listener(const Listener& other) = delete;
+
+        Listener(Listener&& other) noexcept : _counter(other._counter) {
+            other._counter = new ListenCounter<Event>(0, nullptr, true);
+        }
+
+        Listener() : _counter(new ListenCounter<Event>(0, nullptr, true)) {};
+
+        template<class Fun>
+        Listener(Fun callee): _counter(new ListenCounter<Event>(0, callee, true)) {}
 
         ~Listener() {
-            _counter->_callee = nullptr;
+            _counter->callee = nullptr;
+            _counter->active = false;
             if (_counter->registered == 0) {
                 delete _counter;
             }
@@ -35,6 +45,11 @@ namespace hey {
 
         [[nodiscard]] size_t getId() const {
             return _counter->id;
+        }
+
+        Listener& operator=(std::function<void(Event)> callee) {
+            _counter->callee = callee;
+            return *this;
         }
     };
 }

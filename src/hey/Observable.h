@@ -13,11 +13,13 @@ namespace hey {
         std::vector<ListenCounter<Event>*> _counters;
 
     public:
+        Observable(const Observable& other) = delete;
+
         Observable() = default;
 
-        ~Observable() {
+        virtual ~Observable() {
             for (auto counter: _counters) {
-                if (counter->_callee == nullptr && counter->registered == 1) {
+                if (!counter->active && counter->registered == 1) {
                     delete counter;
                 } else {
                     --counter->registered;
@@ -26,16 +28,30 @@ namespace hey {
         }
 
         void addListener(const Listener<Event>& listener) {
-            _counters.push_back(listener.getCounter());
+            auto* counter = listener.getCounter();
+            _counters.push_back(counter);
+            ++counter->registered;
         }
 
-        void invoke(Event event) {
+        void invoke(Event event) const {
             for (auto counter: _counters) {
-                auto callee = counter->_callee;
+                auto callee = counter->callee;
                 if (callee != nullptr) {
                     callee(event);
                 }
             }
+        }
+
+        template<class Fun>
+        Listener<Event> createListener(Fun fun) {
+            Listener<Event> listener(std::move(fun));
+            addListener(listener);
+            return listener;
+        }
+
+        Observable& operator+=(const Listener<Event>& listener) {
+            addListener(listener);
+            return *this;
         }
     };
 }
