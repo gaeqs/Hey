@@ -69,8 +69,24 @@ namespace hey {
         * Assigns a new reaction to this listener.
         * The old reaction will be overridden.
         */
-        Listener& operator=(std::function<void(Event)> callee) {
+        template<class Fun>
+        requires std::is_invocable_v<Fun, Event>
+        Listener& operator=(Fun callee) {
             _counter->callee = callee;
+            return *this;
+        }
+
+        Listener& operator=(Listener&& other) noexcept {
+            if (this == &other) return *this;
+
+            _counter->callee = nullptr;
+            _counter->active = false;
+            if (_counter->registered == 0) {
+                delete _counter;
+            }
+
+            _counter = other._counter;
+            other._counter = new ListenCounter<Event>(0, nullptr, true);
             return *this;
         }
     };
