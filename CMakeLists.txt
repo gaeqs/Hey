@@ -16,7 +16,7 @@ install(TARGETS hey
         INCLUDES DESTINATION include
 )
 
-install(DIRECTORY hey DESTINATION include)
+install(DIRECTORY src DESTINATION include)
 
 install(EXPORT hey_targets
         FILE hey_targets.cmake
