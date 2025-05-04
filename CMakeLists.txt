@@ -13,9 +13,6 @@ target_include_directories(hey INTERFACE
 
 install(TARGETS hey
         EXPORT hey_targets
-        LIBRARY DESTINATION lib
-        ARCHIVE DESTINATION lib
-        RUNTIME DESTINATION bin
         INCLUDES DESTINATION include
 )
 
